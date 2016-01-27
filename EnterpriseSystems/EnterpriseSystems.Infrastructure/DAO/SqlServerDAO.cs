@@ -76,9 +76,9 @@ namespace EnterpriseSystems.Infrastructure.DAO
                     queryResult.Load(sqlReader);
                 }
 
-                List<CustomerRequestVO> customerRequestByReferenceNumber = BuildCustomerRequests(queryResult);
+                List<CustomerRequestVO> customerRequestByReferenceNumberAndBusinessName = BuildCustomerRequests(queryResult);
 
-                return customerRequestByReferenceNumber;
+                return customerRequestByReferenceNumberAndBusinessName;
             }
         }
 
@@ -107,6 +107,8 @@ namespace EnterpriseSystems.Infrastructure.DAO
                 customerRequest.Comments = GetCommentsByCustomerRequest(customerRequest);
                 customerRequest.ReferenceNumbers = GetReferenceNumbersByCustomerRequest(customerRequest);
                 customerRequest.Stops = GetStopsByCustomerRequest(customerRequest);
+
+                customerRequests.Add(customerRequest);
             }
 
             return customerRequests;
@@ -161,7 +163,37 @@ namespace EnterpriseSystems.Infrastructure.DAO
 
         private List<StopVO> BuildStops(DataTable dataTable)
         {
-            throw new NotImplementedException();
+            var stops = new List<StopVO>();
+
+            foreach (DataRow currentRow in dataTable.Rows)
+            {
+                var stop = new StopVO
+                {
+                    Identity = (int)currentRow["REQ_ETY_OGN_I"],
+                    EntityName = currentRow["ETY_NM"].ToString(),
+                    EntityIdentity = (int)currentRow["ETY_KEY_I"],
+                    RoleType = currentRow["SLU_PTR_RL_TYP_C"].ToString(),
+                    StopNumber = currentRow["STP_NBR"].ToString(),
+                    CustomerAlias = currentRow["CUS_SIT_ALS"].ToString(),
+                    OrganizationName = currentRow["OGN_NM"].ToString(),
+                    AddressLine1 = currentRow["ADR_LNE_!"].ToString(),
+                    AddressLine2 = currentRow["ADR_LNE_2"].ToString(),
+                    AddressCityName = currentRow["ADR_CTY_NM"].ToString(),
+                    AddressStateCode = currentRow["ADR_ST_PROV_C"].ToString(),
+                    AddressCountryCode = currentRow["ADR_CRY_C"].ToString(),
+                    AddressPostalCode = currentRow["ADR_PST_C_SRG"].ToString(),
+                    CreatedDate = (DateTime)currentRow["CRT_S"],
+                    CreatedUserId = currentRow["CRT_UID"].ToString(),
+                    CreatedProgramCode = currentRow["CRT_PGN_C"].ToString(),
+                    LastUpdatedDate = (DateTime)currentRow["LST_UPD_S"],
+                    LastUpdatedUserId = currentRow["LST_UPD_UID"].ToString(),
+                    LastUpdatedProgramCode = currentRow["LST_UPD_PGM_C"].ToString()
+                };
+
+                //stop.CustomerRequest = GetCustomerRequestsByReferenceNumberAndBusinessName
+            }
+
+            return stops;
         }
 
 

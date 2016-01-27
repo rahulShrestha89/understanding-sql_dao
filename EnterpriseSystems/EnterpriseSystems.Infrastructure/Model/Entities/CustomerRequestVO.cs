@@ -36,5 +36,9 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
         public List<CommentVO> Comments { get; set; }
         public List<ReferenceNumberVO> ReferenceNumbers { get; set; }
         public List<StopVO> Stops { get; set; }
+
+
+        
+        
     }
 }

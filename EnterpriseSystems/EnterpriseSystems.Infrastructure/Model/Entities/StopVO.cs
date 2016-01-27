@@ -7,6 +7,7 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
     {
         public StopVO()
         {
+            this.RecordStatus = "A";
             this.CreatedDate = DateTime.Now;
             this.LastUpdatedDate = DateTime.Now;
             this.CustomerRequest = new CustomerRequestVO();
@@ -38,9 +39,8 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
         public string LastUpdatedUserId { get; set; }
         public string LastUpdatedProgramCode { get; set; }
 
+        public CustomerRequestVO CustomerRequest { get; set; }
         public List<AppointmentVO> Appointments { get; set; }
         public List<CommentVO> Comments { get; set; }
-
-        public CustomerRequestVO CustomerRequest { get; set; }
     }
 }
