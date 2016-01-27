@@ -2,3 +2,4 @@ C:\Users\Mike\MyFiles\School\2016\Cmps415\assignment1\EnterpriseSystems\Enterpri
 C:\Users\Mike\MyFiles\School\2016\Cmps415\assignment1\EnterpriseSystems\EnterpriseSystems.Infrastructure\bin\Debug\EnterpriseSystems.Infrastructure.pdb
 C:\Users\Mike\MyFiles\School\2016\Cmps415\assignment1\EnterpriseSystems\EnterpriseSystems.Infrastructure\obj\Debug\EnterpriseSystems.Infrastructure.dll
 C:\Users\Mike\MyFiles\School\2016\Cmps415\assignment1\EnterpriseSystems\EnterpriseSystems.Infrastructure\obj\Debug\EnterpriseSystems.Infrastructure.pdb
+C:\Users\Mike\MyFiles\School\2016\Cmps415\assignment1\EnterpriseSystems\EnterpriseSystems.Infrastructure\obj\Debug\EnterpriseSystems.Infrastructure.csprojResolveAssemblyReference.cache

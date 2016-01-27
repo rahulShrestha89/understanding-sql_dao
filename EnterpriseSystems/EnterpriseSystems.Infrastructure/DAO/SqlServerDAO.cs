@@ -63,7 +63,23 @@ namespace EnterpriseSystems.Infrastructure.DAO
                         + "A.BUS_UNT_KEY_CH = @BUS_UNT_KEY_CH AND B.ETY_NM = 'CUS_REQ' "
                         + "AND B.ETY_KEY_I = A.CUS_REQ_I AND B.REF_NBR = @REF_NBR";
 
-            throw new NotImplementedException();
+            using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
+            {
+                defaultSqlConnection.Open();
+                DataTable queryResult = new DataTable();
+
+                using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                {
+                    queryCommand.Parameters.AddWithValue("@REF_NBR", referenceNumber);
+                    queryCommand.Parameters.AddWithValue("@BUS_UNT_KEY_CH", businessName);
+                    var sqlReader = queryCommand.ExecuteReader();
+                    queryResult.Load(sqlReader);
+                }
+
+                List<CustomerRequestVO> customerRequestByReferenceNumber = BuildCustomerRequests(queryResult);
+
+                return customerRequestByReferenceNumber;
+            }
         }
 
         private List<CustomerRequestVO> BuildCustomerRequests(DataTable dataTable)
