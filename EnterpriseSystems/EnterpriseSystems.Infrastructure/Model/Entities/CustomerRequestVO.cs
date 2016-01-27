@@ -7,12 +7,14 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
     {
         public CustomerRequestVO()
         {
+            this.TypeCode = "Order";
+            this.RecordStatus = 'A';
+            this.CreatedDate = DateTime.Now;
+            this.LastUpdatedDate = DateTime.Now;
             Appointments = new List<AppointmentVO>();
             Comments = new List<CommentVO>();
             ReferenceNumbers = new List<ReferenceNumberVO>();
             Stops = new List<StopVO>();
-            this.CreatedDate = DateTime.Now;
-            this.LastUpdatedDate = DateTime.Now;
         }
 
         public int Identity { get; set; }
@@ -20,10 +22,12 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
         public string BusinessEntityKey { get; set; }
         public string TypeCode { get; set; }
         public string ConsumerClassificationType { get; set; }
-        public string RecordStatus { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public char RecordStatus { get; set; }
+
+        public DateTime CreatedDate { get; set; }
         public string CreatedUserId { get; set; }
         public string CreatedProgramCode { get; set; }
+
         public DateTime? LastUpdatedDate { get; set; }
         public string LastUpdatedUserId { get; set; }
         public string LastUpdatedProgramCode { get; set; }

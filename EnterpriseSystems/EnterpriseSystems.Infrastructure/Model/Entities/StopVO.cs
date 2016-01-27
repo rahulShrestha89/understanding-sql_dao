@@ -7,12 +7,11 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
     {
         public StopVO()
         {
-            Appointments = new List<AppointmentVO>();
-            Comments = new List<CommentVO>();
-            ReferenceNumbers = new List<ReferenceNumberVO>();
-            CustomerRequests = new List<CustomerRequestVO>();
             this.CreatedDate = DateTime.Now;
             this.LastUpdatedDate = DateTime.Now;
+            this.CustomerRequest = new CustomerRequestVO();
+            Appointments = new List<AppointmentVO>();
+            Comments = new List<CommentVO>();
         }
 
         public int Identity { get; set; }
@@ -29,20 +28,19 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
         public string AddressStateCode { get; set; }
         public string AddressCountryCode { get; set; }
         public string AddressPostalCode { get; set; }
-
         public string RecordStatus { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public string CreatedUserId { get; set; }
-
         public string CreatedProgramCode { get; set; }
+
         public DateTime LastUpdatedDate { get; set; }
         public string LastUpdatedUserId { get; set; }
         public string LastUpdatedProgramCode { get; set; }
 
         public List<AppointmentVO> Appointments { get; set; }
         public List<CommentVO> Comments { get; set; }
-        public List<ReferenceNumberVO> ReferenceNumbers { get; set; }
-        public List<CustomerRequestVO> CustomerRequests { get; set; }
+
+        public CustomerRequestVO CustomerRequest { get; set; }
     }
 }
