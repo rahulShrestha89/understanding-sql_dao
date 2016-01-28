@@ -95,7 +95,7 @@ namespace EnterpriseSystems.Infrastructure.DAO
                     BusinessEntityKey = currentRow["BUS_UNT_ETY_NM"].ToString(),
                     TypeCode = currentRow["REQ_TYP_C"].ToString(),
                     ConsumerClassificationType = currentRow["CNSM_CLS"].ToString(),
-                    CreatedDate = (DateTime?)currentRow["CRT_S"],
+                    CreatedDate = (DateTime)currentRow["CRT_S"],
                     CreatedUserId = currentRow["CRT_UID"].ToString(),
                     CreatedProgramCode = currentRow["CRT_PGM_C"].ToString(),
                     LastUpdatedDate = (DateTime?)currentRow["LST_UPD_S"],
@@ -119,12 +119,51 @@ namespace EnterpriseSystems.Infrastructure.DAO
         {
             const string selectQueryStatement = "SELECT * FROM REQ_ETY_SCH WHERE ETY_NM = 'CUS_REQ' AND ETY_KEY_I = @CUS_REQ_I";
 
-            throw new NotImplementedException();
+            using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
+            {
+                defaultSqlConnection.Open();
+                DataTable queryResult = new DataTable();
+
+                using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                {
+                    queryCommand.Parameters.AddWithValue("@CUS_REQ_I", customerRequest.Identity);
+                    var sqlReader = queryCommand.ExecuteReader();
+                    queryResult.Load(sqlReader);
+                }
+
+                List<AppointmentVO> appointmentsByCustomerRequest = BuildAppointments(queryResult);
+
+                return appointmentsByCustomerRequest;
+            }
         }
 
         private List<AppointmentVO> BuildAppointments(DataTable dataTable)
         {
-            throw new NotImplementedException();
+            var appointments = new List<AppointmentVO>();
+
+            foreach (DataRow currentRow in dataTable.Rows)
+            {
+                var appointment = new AppointmentVO
+                {
+                    Identity = (int)currentRow["REQ_ETY_SCH_I"],
+                    EntityName = currentRow["ETY_NM"].ToString(),
+                    EntityIdentity = (int)currentRow["ETY_KEY_I"],
+                    SequenceNumber = (int?)currentRow["SEQ_NBR"],
+                    FunctionType = currentRow["SCH_FUN_TYP"].ToString(),
+                    AppointmentBegin = (DateTime)currentRow["BEG_S"],
+                    AppointmentEnd = (DateTime)currentRow["END_S"],
+                    TimezoneDescription = currentRow["TZ_TYP_DSC"].ToString(),
+                    Status = currentRow["PRS_STT"] == null ? null : currentRow["PRS_STT"].ToString(),
+                    CreatedDate = (DateTime)currentRow["CRT_S"],
+                    CreatedUserId = currentRow["CRT_UID"].ToString(),
+                    CreatedProgramCode = currentRow["CRT_PGM_C"].ToString(),
+                    LastUpdatedDate = (DateTime)currentRow["LST_UPD_S"],
+                    LastUpdatedUserId = currentRow["LST_UPD_UID"].ToString(),
+                    LasUpdatedProgramCode = currentRow["LST_UPD_PGM_C"].ToString()
+                };
+            }
+
+            return appointments;
         }
 
 
@@ -190,7 +229,8 @@ namespace EnterpriseSystems.Infrastructure.DAO
                     LastUpdatedProgramCode = currentRow["LST_UPD_PGM_C"].ToString()
                 };
 
-                //stop.CustomerRequest = GetCustomerRequestsByReferenceNumberAndBusinessName
+                stop.Appointments = GetAppointmentsByStop(stop);
+                stop.Comments = GetCommentsByStop(stop);
             }
 
             return stops;
@@ -201,14 +241,44 @@ namespace EnterpriseSystems.Infrastructure.DAO
         {
             const string selectQueryStatement = "SELECT * FROM REQ_ETY_SCH WHERE ETY_NM = 'REQ_ETY_OGN' AND ETY_KEY_I = @REQ_ETY_OGN_I";
 
-            throw new NotImplementedException();
+            using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
+            {
+                defaultSqlConnection.Open();
+                DataTable queryResult = new DataTable();
+
+                using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                {
+                    queryCommand.Parameters.AddWithValue("@REQ_ETY_OGN_I", stop.Identity);
+                    var sqlReader = queryCommand.ExecuteReader();
+                    queryResult.Load(sqlReader);
+                }
+
+                List<AppointmentVO> appointmentsByStop = BuildAppointments(queryResult);
+
+                return appointmentsByStop;
+            }
         }
 
         private List<CommentVO> GetCommentsByStop(StopVO stop)
         {
             const string selectQueryStatement = "SELECT * FROM REQ_ETY_CMM WHERE ETY_NM = 'REQ_ETY_OGN' AND ETY_KEY_I = @REQ_ETY_OGN_I";
 
-            throw new NotImplementedException();
+            using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
+            {
+                defaultSqlConnection.Open();
+                DataTable queryResult = new DataTable();
+
+                using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                {
+                    queryCommand.Parameters.AddWithValue("@REQ_ETY_OGN_I", stop.Identity);
+                    var sqlReader = queryCommand.ExecuteReader();
+                    queryResult.Load(sqlReader);
+                }
+
+                List<CommentVO> commentsByStop = BuildComments(queryResult);
+
+                return commentsByStop;
+            }
         }
     }
 }
