@@ -6,7 +6,6 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
     {
         public CommentVO()
         {
-            this.RecordStatus = 'A';
             this.CreatedDate = DateTime.Now;
             this.CreatedDate = DateTime.Now;
             this.CustomerRequest = new CustomerRequestVO();
@@ -18,8 +17,7 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
         public int? SequenceNumber { get; set; }
         public string CommentType { get; set; }
         public string CommentText { get; set; }
-        public char RecordStatus { get; set; }
-
+        
         public DateTime CreatedDate { get; set; }
         public string CreatedUserId { get; set; }
         public string CreatedProgramCode { get; set; }
