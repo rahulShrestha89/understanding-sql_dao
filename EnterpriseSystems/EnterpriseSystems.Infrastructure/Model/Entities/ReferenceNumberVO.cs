@@ -6,7 +6,6 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
     {
         public ReferenceNumberVO()
         {
-            this.RecordStatus = 'A';
             this.CreatedDate = DateTime.Now;
             this.LastUpdatedDate = DateTime.Now;
             this.CustomerRequest = new CustomerRequestVO();
@@ -16,7 +15,6 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
         public int EntityIdentity { get; set; }
         public string SoutheasternReferenceNumberType { get; set; }
         public string ReferenceNumber { get; set; }
-        public char RecordStatus { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public string CreatedUserId { get; set; }

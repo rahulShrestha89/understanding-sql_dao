@@ -7,8 +7,7 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
     {
         public CustomerRequestVO()
         {
-            this.TypeCode = "Order";
-            this.RecordStatus = 'A';
+            this.TypeCode = "ORDER";
             this.CreatedDate = DateTime.Now;
             this.LastUpdatedDate = DateTime.Now;
             Appointments = new List<AppointmentVO>();
@@ -22,7 +21,6 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
         public string BusinessEntityKey { get; set; }
         public string TypeCode { get; set; }
         public string ConsumerClassificationType { get; set; }
-        public char RecordStatus { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public string CreatedUserId { get; set; }

@@ -27,7 +27,6 @@ namespace EnterpriseSystems.Infrastructure.Model.Entities
         public string AddressStateCode { get; set; }
         public string AddressCountryCode { get; set; }
         public string AddressPostalCode { get; set; }
-        public string RecordStatus { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public string CreatedUserId { get; set; }

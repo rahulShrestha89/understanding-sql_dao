@@ -159,8 +159,10 @@ namespace EnterpriseSystems.Infrastructure.DAO
                     CreatedProgramCode = currentRow["CRT_PGM_C"].ToString(),
                     LastUpdatedDate = (DateTime)currentRow["LST_UPD_S"],
                     LastUpdatedUserId = currentRow["LST_UPD_UID"].ToString(),
-                    LasUpdatedProgramCode = currentRow["LST_UPD_PGM_C"].ToString()
+                    LastUpdatedProgramCode = currentRow["LST_UPD_PGM_C"].ToString()
                 };
+
+                appointments.Add(appointment);
             }
 
             return appointments;
@@ -176,6 +178,28 @@ namespace EnterpriseSystems.Infrastructure.DAO
 
         private List<CommentVO> BuildComments(DataTable dataTable)
         {
+            var comments = new List<CommentVO>();
+
+            foreach (DataRow currentRow in dataTable.Rows)
+            {
+                var comment = new CommentVO()
+                {
+                    Identity = (int)currentRow["REQ_ETY_SCH_I"],
+                    EntityName = currentRow["ETY_NM"].ToString(),
+                    EntityIdentity = (int)currentRow["ETY_KEY_I"],
+                    SequenceNumber = (int?)currentRow["SEQ_NBR"],
+                    CommentType = currentRow["CMM_TYP"].ToString(),
+                    CommentText = currentRow["CMM_TXT"].ToString(),
+                    CreatedDate = (DateTime)currentRow["CRT_S"],
+                    CreatedUserId = currentRow["CRT_UID"].ToString(),
+                    CreatedProgramCode = currentRow["CRT_PGM_C"].ToString(),
+                    LastUpdatedDate = (DateTime)currentRow["LST_UPD_S"],
+                    LastUpdatedUserId = currentRow["LST_UPD_UID"].ToString(),
+                    LastUpdatedProgramCode = currentRow["LST_UPD_PGM_C"].ToString()
+                };
+
+                comments.Add(comment);
+            }
             throw new NotImplementedException();
         }
 
@@ -189,7 +213,29 @@ namespace EnterpriseSystems.Infrastructure.DAO
 
         private List<ReferenceNumberVO> BuildReferenceNumbers(DataTable dataTable)
         {
-            throw new NotImplementedException();
+            var referenceNumbers = new List<ReferenceNumberVO>;
+
+            foreach (DataRow currentRow in dataTable.Rows)
+            {
+                var referenceNumber = new ReferenceNumberVO
+                {
+                    Identity = (int)currentRow["REQ_ETY_OGN_I"],
+                    EntityName = currentRow["ETY_NM"].ToString(),
+                    EntityIdentity = (int)currentRow["ETY_KEY_I"],
+                    SoutheasternReferenceNumberType = currentRow["SLU_REF_NBR_TYP"].ToString(),
+                    ReferenceNumber = currentRow["REF_NBR"].ToString(),
+                    CreatedDate = (DateTime)currentRow["CRT_S"],
+                    CreatedUserId = currentRow["CRT_UID"].ToString(),
+                    CreatedProgramCode = currentRow["CRT_PGN_C"].ToString(),
+                    LastUpdatedDate = (DateTime)currentRow["LST_UPD_S"],
+                    LastUpdatedUserId = currentRow["LST_UPD_UID"].ToString(),
+                    LastUpdatedProgramCode = currentRow["LST_UPD_PGM_C"].ToString()
+                };
+
+                referenceNumbers.Add(referenceNumber);
+            }
+
+            return referenceNumbers;
         }
 
 
@@ -215,7 +261,7 @@ namespace EnterpriseSystems.Infrastructure.DAO
                     StopNumber = currentRow["STP_NBR"].ToString(),
                     CustomerAlias = currentRow["CUS_SIT_ALS"].ToString(),
                     OrganizationName = currentRow["OGN_NM"].ToString(),
-                    AddressLine1 = currentRow["ADR_LNE_!"].ToString(),
+                    AddressLine1 = currentRow["ADR_LNE_1"].ToString(),
                     AddressLine2 = currentRow["ADR_LNE_2"].ToString(),
                     AddressCityName = currentRow["ADR_CTY_NM"].ToString(),
                     AddressStateCode = currentRow["ADR_ST_PROV_C"].ToString(),
@@ -231,6 +277,8 @@ namespace EnterpriseSystems.Infrastructure.DAO
 
                 stop.Appointments = GetAppointmentsByStop(stop);
                 stop.Comments = GetCommentsByStop(stop);
+
+                stops.Add(stop);
             }
 
             return stops;
