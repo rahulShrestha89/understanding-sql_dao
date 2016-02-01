@@ -15,21 +15,29 @@ namespace EnterpriseSystems.Infrastructure.DAO
         {
             const string selectQueryStatement = "SELECT * FROM CUS_REQ WHERE CUS_REQ_I = @CUS_REQ_I";
 
-            using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
+            try
             {
-                defaultSqlConnection.Open();
-                DataTable queryResult = new DataTable();
-
-                using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
                 {
-                    queryCommand.Parameters.AddWithValue("@CUS_REQ_I", customerRequestIdentity);
-                    var sqlReader = queryCommand.ExecuteReader();
-                    queryResult.Load(sqlReader);
+                    defaultSqlConnection.Open();
+                    DataTable queryResult = new DataTable();
+
+                    using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                    {
+                        queryCommand.Parameters.AddWithValue("@CUS_REQ_I", customerRequestIdentity);
+                        var sqlReader = queryCommand.ExecuteReader();
+                        queryResult.Load(sqlReader);
+                    }
+
+                    var customerRequestByIdentity = BuildCustomerRequests(queryResult).FirstOrDefault();
+
+                    return customerRequestByIdentity;
                 }
-
-                var customerRequestByIdentity = BuildCustomerRequests(queryResult).FirstOrDefault();
-
-                return customerRequestByIdentity;
+            }
+            catch (SqlException err)
+            {
+                Exception error = new Exception("Error in Get Customer Request By Identity", err);
+                throw error;
             }
         }
 
@@ -39,21 +47,29 @@ namespace EnterpriseSystems.Infrastructure.DAO
                                     + "B.ETY_NM = 'CUS_REQ' AND B.ETY_KEY_I = A.CUS_REQ_I AND "
                                     + "B.REF_NBR = @REF_NBR";
 
-            using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
+            try
             {
-                defaultSqlConnection.Open();
-                DataTable queryResult = new DataTable();
-
-                using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
                 {
-                    queryCommand.Parameters.AddWithValue("@REF_NBR", referenceNumber);
-                    var sqlReader = queryCommand.ExecuteReader();
-                    queryResult.Load(sqlReader);
+                    defaultSqlConnection.Open();
+                    DataTable queryResult = new DataTable();
+
+                    using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                    {
+                        queryCommand.Parameters.AddWithValue("@REF_NBR", referenceNumber);
+                        var sqlReader = queryCommand.ExecuteReader();
+                        queryResult.Load(sqlReader);
+                    }
+
+                    List<CustomerRequestVO> customerRequestByReferenceNumber = BuildCustomerRequests(queryResult);
+
+                    return customerRequestByReferenceNumber;
                 }
-
-                List<CustomerRequestVO> customerRequestByReferenceNumber = BuildCustomerRequests(queryResult);
-
-                return customerRequestByReferenceNumber;
+            }
+            catch (SqlException err)
+            {
+                Exception error = new Exception("Error in Get Customer Requests by Ref Number", err);
+                throw error;
             }
         }
 
@@ -63,22 +79,30 @@ namespace EnterpriseSystems.Infrastructure.DAO
                         + "A.BUS_UNT_KEY_CH = @BUS_UNT_KEY_CH AND B.ETY_NM = 'CUS_REQ' "
                         + "AND B.ETY_KEY_I = A.CUS_REQ_I AND B.REF_NBR = @REF_NBR";
 
-            using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
+            try
             {
-                defaultSqlConnection.Open();
-                DataTable queryResult = new DataTable();
-
-                using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
                 {
-                    queryCommand.Parameters.AddWithValue("@REF_NBR", referenceNumber);
-                    queryCommand.Parameters.AddWithValue("@BUS_UNT_KEY_CH", businessName);
-                    var sqlReader = queryCommand.ExecuteReader();
-                    queryResult.Load(sqlReader);
+                    defaultSqlConnection.Open();
+                    DataTable queryResult = new DataTable();
+
+                    using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                    {
+                        queryCommand.Parameters.AddWithValue("@REF_NBR", referenceNumber);
+                        queryCommand.Parameters.AddWithValue("@BUS_UNT_KEY_CH", businessName);
+                        var sqlReader = queryCommand.ExecuteReader();
+                        queryResult.Load(sqlReader);
+                    }
+
+                    List<CustomerRequestVO> customerRequestByReferenceNumberAndBusinessName = BuildCustomerRequests(queryResult);
+
+                    return customerRequestByReferenceNumberAndBusinessName;
                 }
-
-                List<CustomerRequestVO> customerRequestByReferenceNumberAndBusinessName = BuildCustomerRequests(queryResult);
-
-                return customerRequestByReferenceNumberAndBusinessName;
+            }
+            catch (SqlException err)
+            {
+                Exception error = new Exception("Error in Get Customer Req by Ref Num and Business Name", err);
+                throw error;
             }
         }
 
@@ -119,21 +143,29 @@ namespace EnterpriseSystems.Infrastructure.DAO
         {
             const string selectQueryStatement = "SELECT * FROM REQ_ETY_SCH WHERE ETY_NM = 'CUS_REQ' AND ETY_KEY_I = @CUS_REQ_I";
 
-            using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
+            try
             {
-                defaultSqlConnection.Open();
-                DataTable queryResult = new DataTable();
-
-                using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
                 {
-                    queryCommand.Parameters.AddWithValue("@CUS_REQ_I", customerRequest.Identity);
-                    var sqlReader = queryCommand.ExecuteReader();
-                    queryResult.Load(sqlReader);
+                    defaultSqlConnection.Open(); 
+                    DataTable queryResult = new DataTable();
+
+                    using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                    {
+                        queryCommand.Parameters.AddWithValue("@CUS_REQ_I", customerRequest.Identity);
+                        var sqlReader = queryCommand.ExecuteReader();
+                        queryResult.Load(sqlReader);
+                    }
+
+                    List<AppointmentVO> appointmentsByCustomerRequest = BuildAppointments(queryResult);
+
+                    return appointmentsByCustomerRequest;
                 }
-
-                List<AppointmentVO> appointmentsByCustomerRequest = BuildAppointments(queryResult);
-
-                return appointmentsByCustomerRequest;
+            }
+            catch (SqlException err)
+            {
+                Exception error = new Exception("Error in Get Appointments by Customer Request", err);
+                throw error;
             }
         }
 
@@ -173,7 +205,30 @@ namespace EnterpriseSystems.Infrastructure.DAO
         {
             const string selectQueryStatement = "SELECT * FROM REQ_ETY_CMM WHERE ETY_NM = 'CUS_REQ' AND ETY_KEY_I = @CUS_REQ_I";
 
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
+                {
+                    defaultSqlConnection.Open();
+                    DataTable queryResult = new DataTable();
+
+                    using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                    {
+                        queryCommand.Parameters.AddWithValue("@CUS_REQ_I", customerRequest.Identity);
+                        var sqlReader = queryCommand.ExecuteReader();
+                        queryResult.Load(sqlReader);
+                    }
+
+                    List<CommentVO> commentsByCustomerRequest = BuildComments(queryResult);
+
+                    return commentsByCustomerRequest;
+                }
+            }
+            catch (SqlException err)
+            {
+                Exception error = new Exception("Error in Get Comments by Customer Request", err);
+                throw error;
+            }
         }
 
         private List<CommentVO> BuildComments(DataTable dataTable)
@@ -208,12 +263,35 @@ namespace EnterpriseSystems.Infrastructure.DAO
         {
             const string selectQueryStatement = "SELECT * FROM REQ_ETY_REF_NBR WHERE ETY_NM = 'CUS_REQ' AND ETY_KEY_I = @CUS_REQ_I";
 
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
+                {
+                    defaultSqlConnection.Open();
+                    DataTable queryResult = new DataTable();
+
+                    using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                    {
+                        queryCommand.Parameters.AddWithValue("@CUS_REQ_I", customerRequest.Identity);
+                        var sqlReader = queryCommand.ExecuteReader();
+                        queryResult.Load(sqlReader);
+                    }
+
+                    List<ReferenceNumberVO> referenceNumbersByCustomerRequest = BuildReferenceNumbers(queryResult);
+
+                    return referenceNumbersByCustomerRequest;
+                }
+            }
+            catch (SqlException err)
+            {
+                Exception error = new Exception("Error in Get Reference Numbers by Customer Request", err);
+                throw error;
+            }
         }
 
         private List<ReferenceNumberVO> BuildReferenceNumbers(DataTable dataTable)
         {
-            var referenceNumbers = new List<ReferenceNumberVO>;
+            var referenceNumbers = new List<ReferenceNumberVO>();
 
             foreach (DataRow currentRow in dataTable.Rows)
             {
@@ -243,7 +321,30 @@ namespace EnterpriseSystems.Infrastructure.DAO
         {
             const string selectQueryStatement = "SELECT * FROM REQ_ETY_OGN WHERE ETY_NM = 'CUS_REQ' AND ETY_KEY_I = @CUS_REQ_I";
 
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
+                {
+                    defaultSqlConnection.Open();
+                    DataTable queryResult = new DataTable();
+
+                    using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                    {
+                        queryCommand.Parameters.AddWithValue("@CUS_REQ_I", customerRequest.Identity);
+                        var sqlReader = queryCommand.ExecuteReader();
+                        queryResult.Load(sqlReader);
+                    }
+
+                    List<StopVO> stopsByCustomerRequest = BuildStops(queryResult);
+
+                    return stopsByCustomerRequest;
+                }
+            }
+            catch (SqlException err)
+            {
+                Exception error = new Exception("Error in Get Stops by Customer Request", err);
+                throw error;
+            }
         }
 
         private List<StopVO> BuildStops(DataTable dataTable)
