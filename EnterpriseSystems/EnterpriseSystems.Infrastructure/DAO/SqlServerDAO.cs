@@ -255,7 +255,8 @@ namespace EnterpriseSystems.Infrastructure.DAO
 
                 comments.Add(comment);
             }
-            throw new NotImplementedException();
+
+            return comments;
         }
 
 
@@ -390,21 +391,29 @@ namespace EnterpriseSystems.Infrastructure.DAO
         {
             const string selectQueryStatement = "SELECT * FROM REQ_ETY_SCH WHERE ETY_NM = 'REQ_ETY_OGN' AND ETY_KEY_I = @REQ_ETY_OGN_I";
 
-            using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
+            try
             {
-                defaultSqlConnection.Open();
-                DataTable queryResult = new DataTable();
-
-                using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
                 {
-                    queryCommand.Parameters.AddWithValue("@REQ_ETY_OGN_I", stop.Identity);
-                    var sqlReader = queryCommand.ExecuteReader();
-                    queryResult.Load(sqlReader);
+                    defaultSqlConnection.Open();
+                    DataTable queryResult = new DataTable();
+
+                    using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                    {
+                        queryCommand.Parameters.AddWithValue("@REQ_ETY_OGN_I", stop.Identity);
+                        var sqlReader = queryCommand.ExecuteReader();
+                        queryResult.Load(sqlReader);
+                    }
+
+                    List<AppointmentVO> appointmentsByStop = BuildAppointments(queryResult);
+
+                    return appointmentsByStop;
                 }
-
-                List<AppointmentVO> appointmentsByStop = BuildAppointments(queryResult);
-
-                return appointmentsByStop;
+            }
+            catch (SqlException err)
+            {
+                Exception error = new Exception("Error in Get Appointments by Stop", err);
+                throw error;
             }
         }
 
@@ -412,22 +421,31 @@ namespace EnterpriseSystems.Infrastructure.DAO
         {
             const string selectQueryStatement = "SELECT * FROM REQ_ETY_CMM WHERE ETY_NM = 'REQ_ETY_OGN' AND ETY_KEY_I = @REQ_ETY_OGN_I";
 
-            using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
+            try
             {
-                defaultSqlConnection.Open();
-                DataTable queryResult = new DataTable();
-
-                using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                using (SqlConnection defaultSqlConnection = new SqlConnection(DatabaseConnectionString))
                 {
-                    queryCommand.Parameters.AddWithValue("@REQ_ETY_OGN_I", stop.Identity);
-                    var sqlReader = queryCommand.ExecuteReader();
-                    queryResult.Load(sqlReader);
+                    defaultSqlConnection.Open();
+                    DataTable queryResult = new DataTable();
+
+                    using (SqlCommand queryCommand = new SqlCommand(selectQueryStatement, defaultSqlConnection))
+                    {
+                        queryCommand.Parameters.AddWithValue("@REQ_ETY_OGN_I", stop.Identity);
+                        var sqlReader = queryCommand.ExecuteReader();
+                        queryResult.Load(sqlReader);
+                    }
+
+                    List<CommentVO> commentsByStop = BuildComments(queryResult);
+
+                    return commentsByStop;
                 }
-
-                List<CommentVO> commentsByStop = BuildComments(queryResult);
-
-                return commentsByStop;
+            }
+            catch (SqlException err)
+            {
+                Exception error = new Exception("Error in Get Comments by Stop", err);
+                throw error;
             }
         }
+
     }
 }
